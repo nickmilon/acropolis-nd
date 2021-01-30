@@ -1,0 +1,46 @@
+{
+  "name": "acropolis-nd",
+  "version": "0.0.1",
+  "description": "node, js utilities",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickmilon/acropolis-nd.git"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "utilities"
+  ],
+  "author": {
+    "name": "@nickmilon",
+    "email": "flavio@flaviocopes.com",
+    "url": "https://stackoverflow.com/users/199352/nickmilon"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nickmilon/acropolis-nd/issues"
+  },
+  "homepage": "https://github.com/nickmilon/acropolis-nd#readme",
+  "engines": {
+    "node": ">=14"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "verbose": true,
+    "bail": 2,
+    "testEnvironment": "jest-environment-node",
+    "transform": {},
+    "coverageReporters": ["html"],
+    "globals": {
+      "__inspect__": false
+    }
+  }
+}
