@@ -1,11 +1,11 @@
 {
   "name": "acropolis-nd",
-  "version": "0.0.1",
+  "version": "0.2.1",
   "description": "node, js utilities",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   ],
   "author": {
     "name": "@nickmilon",
-    "email": "flavio@flaviocopes.com",
+    "email": "nickmilon@geognos.com",
     "url": "https://stackoverflow.com/users/199352/nickmilon"
   },
   "license": "Apache-2.0",
@@ -40,7 +40,7 @@
     "transform": {},
     "coverageReporters": ["html"],
     "globals": {
-      "__inspect__": false
+      "__inspect__": true
     }
   }
 }
