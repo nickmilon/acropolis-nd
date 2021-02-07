@@ -6,6 +6,7 @@
  */
 
 import { Chronos, Homer, Plato, Solon,  Pythagoras, Thales } from '../index.js'; // import all to check imports
+import { testEnumBits } from '../lib/scripts.js';
 
 const { EnumBits } = Thales;
 const logger = (__inspect__ === true) ? console : Plato.DummyLogger;
@@ -41,23 +42,29 @@ describe('check Acropolis-nd', () => {
     expect(Chronos.convertMS(100000000)).toEqual('01:03:46:40');
   });
   it('Thales', async () => {
-    let fruits = new EnumBits([...Array(29).keys()]);
+    let fruits = new EnumBits([...Array(27).keys()]);
     await Plato.timeIt(fruits.flagsFromIntArrScan(7), 'flagsFromIntArrScan', 100000, logger);
     await Plato.timeIt(fruits.flagsFromIntArrLookUp(7), 'flagsFromIntArrLookUp', 100000, logger);
     // console.log('xxxxxxxxxxxxxxxxxxxx', {result});
-    fruits = new EnumBits(['lemon', 'orange', 'watermelon']);
+    fruits = new EnumBits(['lemon', 'orange', 'watermelon', 'mandarin', 'banana', 'mango', 'strawberry'])  // (['lemon', 'orange', 'watermelon']);
+    // const fruits = ['orange', 'mandarin', 'lemon', 'bananas', 'mango', 'strawberry', 'watermelon'];
+    // const fruitsEnum = new EnumBits(fruits);
     expect(fruits.flagsFromIntObj(6).orange).toEqual(true); // >> { lemon: true, orange: true, watermelon: false }
     expect(() => { new EnumBits(['lemon', 'lemon']); }).toThrow('EnumBits: flags must be unique but are not');
     expect(() => { new EnumBits([...Array(53).keys()]); }).toThrow();
     expect(() => { new EnumBits([...Array(31).keys()], { allow52bits: false }); }).toThrow();
     expect(() => { new EnumBits(Array.from({ length: 36 }, (_, i) => i + 1), { allow52bits: true }); }).not.toThrow();
+    expect(() => {
+      for (let cnt = 1; cnt <= 10; cnt += 1) { testEnumBits(fruits); }
+    }).not.toThrow();
+    expect(() => {
+      fruits = new EnumBits([...Array(30).keys()]);
+      for (let cnt = 1; cnt <= 10000; cnt += 1) { testEnumBits(fruits); }
+    }).not.toThrow();
   });
 
   it('Pythagoras', async () => {
     expect(Pythagoras.isInRange(100, 99, 100)).toBe(true);
     expect(Pythagoras.isInRange(-1, 0, 10)).toBe(false);
   });
-
 });
-
-
