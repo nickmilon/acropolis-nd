@@ -1,11 +1,13 @@
 {
   "name": "acropolis-nd",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "node, js utilities",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --detectOpenHandles"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --detectOpenHandles",
+    "examples": "node --trace-warnings lib/scripts/examples.js",
+    "playground": "node lib/scripts/playground.js"
   },
   "repository": {
     "type": "git",
@@ -38,9 +40,15 @@
     "bail": 2,
     "testEnvironment": "jest-environment-node",
     "transform": {},
-    "coverageReporters": ["html"],
+    "testTimeout": 10000,
+    "coverageReporters": [
+      "html"
+    ],
     "globals": {
       "__inspect__": true
     }
+  },
+  "dependencies": {
+    "hipparchos": "^1.0.2"
   }
 }
