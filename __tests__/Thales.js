@@ -7,11 +7,11 @@
  */
 
 import { Thales, Pythagoras, Zeno } from '../index.js'; // import all to check imports
-import { fruitsArr, dummyArr } from '../lib/scripts/examples.js';
+import { fruitsArr } from '../lib/scripts/examples.js';
 
 const { EnumBits } = Thales;
 const { randomBetween } = Pythagoras;
-const { arrEquivalent, arrSubset } = Zeno;
+const { arrEquivalent, arrSubset, arrDummyStr } = Zeno;
 const logger = (__inspect__ === true) ? console : Plato.DummyLogger;
 // eslint-disable-next-line no-console
 console.info('*** set __inspect__ var in package.json to true || false to view/hide test details ***');
@@ -34,7 +34,7 @@ describe('check Acropolis-nd bitwise operations', () => {
   it('Thales benchmark', async () => {
     if (!__inspect__) { return; }
     const loops = 10000;
-    const dummyArrArr = dummyArr(100, 'dummy_');
+    const dummyArrArr = arrDummyStr(100, 'dummy_');
     const enumFlags = new EnumBits(dummyArrArr);
     // logger.log({ obj: enumFlags.flagsObj, map: enumFlags.flagsMap, dummyArrArr})
     const idxToGet = BigInt(2 ** 9);
@@ -43,9 +43,52 @@ describe('check Acropolis-nd bitwise operations', () => {
     const obj = enumFlags.flagsToObj(idxToGet);
     timeFun(() => enumFlags.flagsFromObj(obj), loops, 'Thales.map');
   });
+  it('examples', () => {
+    const fruits = new EnumBits(['orange', 'mandarin', 'lemon', 'banana', 'mango', 'strawberry', 'watermelon'])
+    expect(fruits.size).toEqual(7);
+    expect(fruits.maxNum).toEqual(127);
+    expect(arrEquivalent(fruits.flagsToPwr2Arr(['mandarin', 'mango']), [2, 16])).toBe(true);
+    expect(arrEquivalent(fruits.numToFlags(18), ['mandarin', 'mango'])).toBe(true);
+
+    let num = fruits.setFlag('mandarin');
+    expect(num).toEqual(2);
+
+    num = fruits.setFlag('mango', num);
+    expect(num).toEqual(18);
+
+    num = fruits.unsetFlag('mandarin', num);
+    expect(num).toEqual(16);
+
+    num = fruits.setFlagArr(['lemon', 'banana'], num);
+    expect(num).toEqual(28);
+    expect(arrEquivalent(fruits.numToFlags(num), ['lemon', 'banana', 'mango'])).toBe(true);
+
+    num = fruits.toggleFlag('mango', num);
+    expect(num).toEqual(12);
+    expect(arrEquivalent(fruits.numToFlags(num), ['lemon', 'banana'])).toBe(true); // mango is gone
+
+    num = fruits.toggleFlagArr(['watermelon', 'strawberry'], num);
+    expect(arrEquivalent(fruits.numToFlags(num), ['lemon', 'banana', 'strawberry', 'watermelon'])).toBe(true);
+
+    let fObj = fruits.flagsToObj(num);
+    expect(fruits.flagsFromObj(fObj)).toEqual(num);
+    expect(arrEquivalent(Object.entries(fObj).map(([k]) => k), ['lemon', 'banana', 'strawberry', 'watermelon'])).toBe(true); 
+
+    fObj = fruits.flagsToObjIncFalse(num);
+    expect(fruits.flagsFromObj(fObj)).toEqual(num);
+    expect(arrEquivalent(Object.entries(fObj).filter((kv) => kv[1] === true).map(([k]) => k), ['lemon', 'banana', 'strawberry', 'watermelon'])).toBe(true); 
+
+    const flagsBI = [...Array(1000).keys()].map((idx) => `flag_${idx}`);
+    const enumBI = new EnumBits(flagsBI);
+
+    expect(enumBI.size).toEqual(1000);
+
+    const bi = enumBI.flagsToPwr2Arr(['flag_0', 'flag_100', 'flag_101']);
+    expect(arrEquivalent(enumBI.pwr2ArrToFlags(bi), ['flag_0', 'flag_100', 'flag_101'])).toBe(true);
+  });
 
   it('creation and operations', () => {
-    const flagsArr100 = dummyArr(100);
+    const flagsArr100 = arrDummyStr(100);
     expect(() => { new EnumBits([...fruitsArr, fruitsArr[0]]); }).toThrow('EnumBits: flags must be unique but are not');
     expect(() => { new EnumBits([...flagsArr100, flagsArr100[0]]); }).toThrow('EnumBits: flags must be unique but are not');
     expect(() => { new EnumBits([]); }).toThrow();
@@ -66,7 +109,7 @@ describe('check Acropolis-nd bitwise operations', () => {
     enumFruits.setFlag('banana', 0);
     expect(arrEquivalent(enumFruits.numToFlags(enumFruits.setFlag('banana', 0)), ['banana'])).toBe(true);
     expect(arrEquivalent(enumFruits.numToFlags(enumFruits.toggleFlag('banana', 0)), ['banana'])).toBe(true);
-    const [fruit0, fruit1, fruitN] = [fruitsArr[0], fruitsArr[1], fruitsArr[fruitsArr.length - 1]]; 
+    const [fruit0, fruit1, fruitN] = [fruitsArr[0], fruitsArr[1], fruitsArr[fruitsArr.length - 1]];
     let num = enumFruits.flagsToNum([fruit0, fruitN]);
     expect(arrEquivalent(enumFruits.numToFlags(num), [fruitN, fruit0])).toBe(true);
     num = enumFruits.toggleFlag(fruitN, num);
@@ -75,17 +118,14 @@ describe('check Acropolis-nd bitwise operations', () => {
     num = enumFruits.toggleFlag(fruitN, num); // back to 2 fruits
     expect(arrEquivalent(enumFruits.numToFlags(num), [fruitN, fruit0])).toBe(true);
     num = enumFruits.toggleFlag(fruit1, num);
-    // console.log('xxxxxxxxxxxxxxxxxxxxxxx', isSubset([fruitN, fruit0], [fruitN, fruit0, fruit1]));
     expect(arrSubset([fruitN, fruit0], enumFruits.numToFlags(num))).toBe(true);
     num = enumFruits.unsetFlag(fruitN, num);
     expect(arrEquivalent(enumFruits.numToFlags(num), [fruit1, fruit0])).toBe(true);
-    // logger.log({ setFlag, setFlagArr: enumFruits.numToFlags(1) });
-    // expect(arrEquivalent( enumFruits.flagsToNum(enumFruits.numToFlags(3)) ).toEqual(3));
   });
 
   it('Thales randomized tests', () => {
     const loops = 1000;
-    const dummyFlags = dummyArr(randomBetween(32, 100));
+    const dummyFlags = arrDummyStr(randomBetween(32, 100));
     const enumDummy = new EnumBits(dummyFlags);
     const enumFruits = new EnumBits(fruitsArr);
     const tst = (enm) => {

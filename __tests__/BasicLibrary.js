@@ -8,7 +8,6 @@
 
 import { Chronos, Homer, Plato, Solon,  Pythagoras } from '../index.js'; // import all to check imports
 import { timeIt } from '../lib/scripts/nodeOnly.js';
-// import { testEnumBits } from '../lib/scripts/bitFields.js/index.js';
 
 // const { EnumBits } = Thales;
 
