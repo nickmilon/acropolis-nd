@@ -7,4 +7,3 @@ export * as Thales from './lib/Thales.js';
 export * as Euclid from './lib/Euclid.js';
 export * as Hamartia from './lib/Hamartia.js';
 export * as Zeno from './lib/Zeno.js';
-export * as bitFields from './lib/scripts/bitFields.js';
