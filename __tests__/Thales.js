@@ -6,7 +6,7 @@
  * @jest-environment node
  */
 
-import { Thales, Pythagoras, Zeno } from '../index.js'; // import all to check imports
+import { Thales, Pythagoras, Zeno, Plato } from '../index.js'; // import all to check imports
 import { fruitsArr } from '../lib/scripts/examples.js';
 
 const { EnumBits } = Thales;

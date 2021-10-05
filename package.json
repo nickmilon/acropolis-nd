@@ -1,11 +1,12 @@
 {
   "name": "acropolis-nd",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "node, js utilities",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --detectOpenHandles",
+    "docs_overwrite": "jsdoc lib/*.js -r -c ../jsdoc_conf.json -P ./package.json -R README.md  -d ../docs/ --debug",
     "examples": "node --trace-warnings lib/scripts/examples.js",
     "playground": "node lib/scripts/playground.js"
   },
@@ -29,7 +30,7 @@
   },
   "homepage": "https://github.com/nickmilon/acropolis-nd#readme",
   "engines": {
-    "node": ">=14"
+    "node": ">=16.10.0"
   },
   "devDependencies": {
     "jest": "^26.6.3"
@@ -45,13 +46,14 @@
       "html"
     ],
     "globals": {
-      "__inspect__": true
+      "__inspect__": false
     }
   },
   "dependencies": {
     "hipparchos": "^1.0.2"
   },
-  "toDelete": {
+
+  "@delete": {
     "testDel": "jest --detectOpenHandles",
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --detectOpenHandles",
     "examples": "node --trace-warnings lib/scripts/examples.js" 

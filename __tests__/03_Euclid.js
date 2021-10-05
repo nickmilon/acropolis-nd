@@ -4,6 +4,8 @@
  * @jest-environment node
  */
 
+// eslint-disable-next-line import/no-unresolved
+import { setTimeout } from 'timers/promises';
 import { randomBetween } from '../lib/Pythagoras.js';
 import { inspectIt } from '../lib/scripts/nodeOnly.js';
 import { arrIdentical } from '../lib/Zeno.js';
@@ -77,6 +79,7 @@ describe('check pagination', () => {
   });
 
   afterAll(async () => {
+    await setTimeout(500); // give it some time for printouts if any
   });
 
   it('pagination', async () => {
