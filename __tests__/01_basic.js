@@ -3,17 +3,22 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-undef */
 /**
- * @jest-environment node
- */
+* @jest-environment node
+*/
 
+import { runOptions } from '../config.js';
+import { setTimeout as setTimeoutAsync } from 'timers/promises';
 import { Chronos, Homer, Plato, Solon,  Pythagoras } from '../index.js'; // import all to check imports
-import { timeIt } from '../lib/scripts/nodeOnly.js';
+import { timeIt, ConLog, consolDummy } from '../lib/scripts/nodeOnly.js';
 
 // const { EnumBits } = Thales;
 
-const logger = (__inspect__ === true) ? console : Plato.DummyLogger;
+const logLevel = runOptions?.tests?.logLevel || 'log';
+
+const logger = (logLevel === 'silent') ? consolDummy : new ConLog('debug', { inclTS: true });
+
 // eslint-disable-next-line no-console
-console.info('*** set __inspect__ variable in package.json to true || false to view/hide test details ***');
+console.log(`set logLevel variable in config.js in one of available Levels: ${ConLog.availableLevelsStr()}`);
 
 describe('check Acropolis-nd', () => {
   beforeAll(async () => {
@@ -21,7 +26,7 @@ describe('check Acropolis-nd', () => {
   });
 
   afterAll(async () => {
-
+    await setTimeoutAsync(100);
   });
 
   it('Pythagoras', async () => {
@@ -41,32 +46,22 @@ describe('check Acropolis-nd', () => {
     expect(Pythagoras.isInRange(100, 99, 100)).toBe(true);
     expect(Pythagoras.isInRange(-1, 0, 10)).toBe(false);
   });
+
   it('Chronos', async () => {
     expect(Chronos.dtToStrCompressed(new Date('2021-01-30T18:29:33'))).toEqual('210130162933');
     expect(Chronos.convertMS(100000000)).toEqual('01:03:46:40');
   });
 
-  /*
-  it('Thales', async () => {
-    let fruits = new EnumBits([...Array(27).keys()]);
-    await timeIt(fruits.flagsFromIntArrScan(7), 'flagsFromIntArrScan', 100000, logger);
-    await timeIt(fruits.flagsFromIntArrLookUp(7), 'flagsFromIntArrLookUp', 100000, logger);
-    // console.log('xxxxxxxxxxxxxxxxxxxx', {result});
-    fruits = new EnumBits(['lemon', 'orange', 'watermelon', 'mandarin', 'banana', 'mango', 'strawberry'])  // (['lemon', 'orange', 'watermelon']);
-    // const fruits = ['orange', 'mandarin', 'lemon', 'bananas', 'mango', 'strawberry', 'watermelon'];
-    // const fruitsEnum = new EnumBits(fruits);
-    expect(fruits.flagsFromIntObj(6).orange).toEqual(true); // >> { lemon: true, orange: true, watermelon: false }
-    expect(() => { new EnumBits(['lemon', 'lemon']); }).toThrow('EnumBits: flags must be unique but are not');
-    expect(() => { new EnumBits([...Array(53).keys()]); }).toThrow();
-    expect(() => { new EnumBits([...Array(32).keys()], { allow52bits: false }); }).toThrow();
-    expect(() => { new EnumBits(Array.from({ length: 36 }, (_, i) => i + 1), { allow52bits: true }); }).not.toThrow();
-    expect(() => {
-      for (let cnt = 1; cnt <= 10; cnt += 1) { testEnumBits(fruits); }
-    }).not.toThrow();
-    expect(() => {
-      fruits = new EnumBits([...Array(31).keys()]);
-      for (let cnt = 1; cnt <= 10000; cnt += 1) { testEnumBits(fruits); }
-    }).not.toThrow();
+  it('ConLogDemoOnly', async () => {
+    const foo = {
+      foo: ['xxxxxxxxxxxxxxxxxxxxxxxxxxx', ['yyyyyyyyyyyyyyyy', 'zzzzzzzzzzzzzzzzzzz', 'wwwwwwwwwwww']],
+      bar: 11,
+    };
+    const conLog = new ConLog('debug');
+    conLog.dir(foo, { showHidden: false, depth: 200 }, 'info');
+    conLog.inspectIt(foo, 'object foo', { showHidden: false, depth: 200 }, 'info');
+    conLog.log('data1', 'data2', '='.repeat(100));
+    conLog.time('foo', 'info');
+    conLog.timeEnd('foo', 'info');
   });
-  */
 });
