@@ -1,6 +1,6 @@
 {
   "name": "acropolis-nd",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "node, js utilities",
   "type": "module",
   "main": "index.js",
@@ -32,8 +32,6 @@
   "engines": {
     "node": ">=16.10.0"
   },
-  "devDependencies": {
-  },
   "jest": {
     "collectCoverage": true,
     "verbose": true,
@@ -51,10 +49,9 @@
   "dependencies": {
     "hipparchos": "^1.0.2"
   },
-
   "@delete": {
     "testDel": "jest --detectOpenHandles",
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --detectOpenHandles",
-    "examples": "node --trace-warnings lib/scripts/examples.js" 
+    "examples": "node --trace-warnings lib/scripts/examples.js"
   }
 }
